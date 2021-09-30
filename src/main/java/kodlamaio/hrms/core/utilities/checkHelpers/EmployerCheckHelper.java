@@ -10,7 +10,7 @@ public class EmployerCheckHelper {
 		if (employer.getCompanyName().isEmpty() || 
 			employer.getEmail().isEmpty() ||
 			employer.getPassword().isEmpty() || 
-			employer.getWebAdress().isEmpty() || 
+			employer.getWebAddress().isEmpty() || 
 			employer.getPhoneNumber().isEmpty() 
 			
 			) {

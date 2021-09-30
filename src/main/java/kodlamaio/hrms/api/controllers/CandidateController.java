@@ -11,6 +11,9 @@ import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import kodlamaio.hrms.entities.concretes.Candidate;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,7 +41,7 @@ public class CandidateController {
 
 	
 	@PostMapping("/add")
-	public Result add(@RequestBody Candidate candidate) {
+	public Result add(@Valid @RequestBody Candidate candidate) { // valid kuralları çalıştırır
 		
 		return this.candidateService.add(candidate);
 	}

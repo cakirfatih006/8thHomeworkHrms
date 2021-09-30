@@ -2,6 +2,8 @@ package kodlamaio.hrms.api.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import kodlamaio.hrms.business.abstracts.JobPostingService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.entities.concretes.JobPosting;
+
+import kodlamaio.hrms.entities.dtos.JobPostingAddDto;
+import kodlamaio.hrms.entities.dtos.JobPostingDto;
+
 
 @RestController
 @RequestMapping("/api/jobpostings")
@@ -26,36 +31,29 @@ public class JobPostingController {
 		this.jobPostingService = jobPostingService;
 		
 	}
-	@GetMapping("/getall")
-	public DataResult<List<JobPosting>> getAll() {
-		
-		return this.jobPostingService.getAll();
-		
-	}
 	
-	@GetMapping("/getallbyactivated")
-	public DataResult<List<JobPosting>> getAllSortedByActivated() {
-		
-		return this.jobPostingService.getAllSortedByActivated();
-		
-	}
 	
-	@GetMapping("/getallbydate")
-	public DataResult<List<JobPosting>> getAllSortedByDate() {
-		
-		return this.jobPostingService.getAllSortedByDate();
-		
-	}
+	
 	@PostMapping("/add")
-	public Result add(@RequestBody JobPosting jobPostings) {
-		
-		return this.jobPostingService.add(jobPostings);
+	Result add(@Valid @RequestBody JobPostingAddDto jobPostingAddDto) {
+		return this.jobPostingService.add(jobPostingAddDto);
 	}
 	
-	@PostMapping("/update")
-	public Result update(JobPosting jobPostings) {
-		
-		return this.jobPostingService.update(jobPostings);
+	@GetMapping("/getActive")
+	DataResult<List<JobPostingDto>> findByIsActive(){
+		return this.jobPostingService.findByIsActive();
+	}
+	
+	
+	@GetMapping("/getActive/OrderByEndDate")
+	DataResult<List<JobPostingDto>> findByIsActiveOrderByApplicationDeadline(){
+		return this.jobPostingService.findByIsActiveOrderByApplicationDeadline();
+	}
+	
+	@GetMapping("/get/CompanyName")
+	DataResult<List<JobPostingDto>> findByIsActiveAndEmployer_CompanyName(String companyName){
+		return this.jobPostingService.findByIsActiveAndEmployer_CompanyName(companyName);
 		
 	}
+	
 }

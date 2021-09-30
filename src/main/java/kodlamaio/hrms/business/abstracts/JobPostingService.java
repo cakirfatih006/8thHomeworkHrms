@@ -5,17 +5,19 @@ import java.util.List;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.JobPosting;
+import kodlamaio.hrms.entities.dtos.JobPostingAddDto;
+import kodlamaio.hrms.entities.dtos.JobPostingDto;
+
 
 public interface JobPostingService {
-
-	DataResult<List<JobPosting>> getAll();
 	
-	DataResult<List<JobPosting>> getAllSortedByActivated();
 	
-	DataResult<List<JobPosting>> getAllSortedByDate();
+	Result add(JobPostingAddDto jobPostingAddDto);
+	Result delete(JobPosting jobPosting);
+	DataResult<List<JobPostingDto>> findByIsActive();
+	DataResult<List<JobPostingDto>> findByIsActiveOrderByApplicationDeadline();
+	DataResult<List<JobPostingDto>> findByIsActiveAndEmployer_CompanyName(String companyName);
+	DataResult<List<JobPostingDto>> getAll();
 	
-	Result add(JobPosting jobPosting);
-	
-	Result update(JobPosting jobPosting);
 	
 }

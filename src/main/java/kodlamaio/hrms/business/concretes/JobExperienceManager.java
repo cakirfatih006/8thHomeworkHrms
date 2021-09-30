@@ -1,0 +1,69 @@
+package kodlamaio.hrms.business.concretes;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kodlamaio.hrms.business.abstracts.JobExperienceService;
+import kodlamaio.hrms.core.dtoConverter.DtoConverterService;
+import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.DataSuccessResult;
+import kodlamaio.hrms.core.utilities.results.Result;
+import kodlamaio.hrms.core.utilities.results.SuccessResult;
+import kodlamaio.hrms.dataAccess.abstracts.JobExperienceDao;
+import kodlamaio.hrms.entities.concretes.JobExperience;
+import kodlamaio.hrms.entities.dtos.JobExperienceDto;
+
+
+@Service
+public class JobExperienceManager implements JobExperienceService{
+
+	private JobExperienceDao jobExperienceDao;
+	private DtoConverterService dtoConverterService;
+	
+
+	@Autowired
+	public JobExperienceManager(JobExperienceDao jobExperienceDao,  DtoConverterService dtoConverterService) {
+		super();
+		this.jobExperienceDao = jobExperienceDao;
+		this.dtoConverterService = dtoConverterService;
+	}
+	
+	
+	
+	@Override
+	public Result add(JobExperience jobExperience) {
+		jobExperienceDao.save(jobExperience);
+		return new SuccessResult("Başarıyla Eklendi");
+	}
+
+	@Override
+	public DataResult<List<JobExperience>> getAll() {
+		return new DataSuccessResult<List<JobExperience>>(jobExperienceDao.findAll(), "Başarıyla Listelendi");
+	}
+
+
+
+	@Override
+	public Result addDto(JobExperienceDto jobExperienceDto) {
+		jobExperienceDao.save((JobExperience) dtoConverterService.dtoClassConverter(jobExperienceDto, JobExperience.class));
+		return new SuccessResult("Başarıyla Eklendi");
+	}
+
+	@Override
+	public DataSuccessResult<List<JobExperienceDto>> getAllDto() {
+		return new DataSuccessResult<List<JobExperienceDto>>
+		(this.dtoConverterService.dtoConverter(this.jobExperienceDao.findAll(),JobExperienceDto.class),"Data Listelendi");
+	}
+
+
+	@Override
+	public DataResult<List<JobExperienceDto>> findAllByResumeIdOrderByEndedDateDesc(int id) {
+		return new DataSuccessResult<List<JobExperienceDto>>
+		(this.dtoConverterService.dtoConverter(this.jobExperienceDao.findAllByResumeIdOrderByEndedDateDesc(id),JobExperienceDto.class),"Data Listelendi");
+	}
+	
+	
+
+}

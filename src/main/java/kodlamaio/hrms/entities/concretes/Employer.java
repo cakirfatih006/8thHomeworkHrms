@@ -6,25 +6,36 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="employers")
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","jobAdvertisement"})
 @PrimaryKeyJoinColumn(name="id") 
 public class Employer extends User{
 	
-	
+	@NotBlank(message="Şirket İsmi Alanı Boş Olamaz")
 	@Column(name="company_name")
 	private String companyName;
 	
+	@NotBlank(message="Web Sitesi Alanı Boş Olamaz")
 	@Column(name="web_address")
 	private String webAddress;
 
+	@NotBlank(message="Telefon Numarası Alanı Boş Olamaz")
 	@Column(name="phone_number")
 	private String phoneNumber;
 	
@@ -32,46 +43,7 @@ public class Employer extends User{
 	@OneToMany(mappedBy= "employer")
 	private List<JobPosting> jobPostings;*/
 
-	public Employer(String companyName, String webAdress, String phoneNumber) {
-		super();
-		this.companyName = companyName;
-		this.webAddress =webAdress;
-		this.phoneNumber = phoneNumber;
-		
-	}
 	
-	
-	public Employer() {}
-
-
-	public String getCompanyName() {
-		return companyName;
-	}
-
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
-
-	public String getWebAdress() {
-		return webAddress;
-	}
-
-
-	public void setWebAdress(String webAddress) {
-		this.webAddress = webAddress;
-	}
-
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
 
 
 	

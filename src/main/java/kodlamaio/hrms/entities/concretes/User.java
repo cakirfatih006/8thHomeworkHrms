@@ -1,5 +1,6 @@
 package kodlamaio.hrms.entities.concretes;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +9,23 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="users")
 public class User {
@@ -19,56 +35,24 @@ public class User {
 	@Column(name="id") 
 	private int id;
 	
+	@Email(message = "Lütfen Geçerli Bir Mail Adresi Giriniz")
+	@NotBlank(message="Mail Alanı Boş olamaz")
 	@Column(name="email")
 	private String email;
 	
+	@NotBlank(message="Şifre Alanı Boş olamaz")
+	@Size(min=6, max=16, message="Şifre en az 6, en fazla 16 karakterden oluşabilir")
 	@Column(name="password")
 	private String password;
 	
-	@Column(name="repeat_password")
+	
+	
+
+	@NotBlank(message="Şifre Alanı Boş olamaz")
+	@Transient
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String repeatPassword;
 	
-	public User() {}
-	
-	public User(String email, String password,String repeatPassword, int id) {
-		super();
-		this.id= id;
-		this.email = email;
-		this.password = password;
-		this.repeatPassword = repeatPassword;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRepeatPassword() {
-		return repeatPassword;
-	}
-
-	public void setRepeatPassword(String repeatPassword) {
-		this.repeatPassword = repeatPassword;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 	
 	
 	

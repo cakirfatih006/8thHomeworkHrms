@@ -11,13 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import lombok.NoArgsConstructor;
-
 
 
 @Data
@@ -25,23 +22,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="job_titles")
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","jobAdvertisement"}) // tembel
-public class JobTitle {
-	
-	
-	@Id							
-	@GeneratedValue	(strategy = GenerationType.IDENTITY)
-	@Column(name="id") 
+@Table(name="education_graduates")
+
+public class Graduate {
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="title")
-	@NotBlank(message="İsim Alanı Boş olamaz")
-	private String title;
 	
-	/*@JsonIgnore
-	@OneToMany(mappedBy ="jobTitle")
-	private List<JobPosting> jobPostings;*/
+	@Column(name="description")
+	@NotBlank(message="Açıklama Boş Geçilemez")
+	private String description;
+	
+	/*@OneToMany(mappedBy = "school_id")
+	private List<Resume> resumes;*/
+	
+	
 	
 	
 }

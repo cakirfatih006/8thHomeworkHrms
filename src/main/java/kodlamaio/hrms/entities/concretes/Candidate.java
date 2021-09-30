@@ -4,67 +4,46 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="candidates")
 @PrimaryKeyJoinColumn(name="id") 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Candidate extends User{
 	
+	
+	@NotBlank(message="Ad Alanı Boş olamaz")
+	@Size(min = 3, message = "İsim alanında en az 3 karakter kullanmanız gerekiyor") 
 	@Column(name="first_name")
 	private String firstName;
 	
+	
+	@NotBlank(message="Soyad Alanı Boş olamaz")
 	@Column(name="last_name")
 	private String lastName;
 	
 	@Column(name="identity_number")
+	@Size(min = 11, max=11, message = "TCKimlik No 11 hane olmalıdır")
+	@NotBlank(message="TC Kimlik Numarası Alanı Boş Olamaz") 
 	private String identityNumber;
 	
+	
 	@Column(name="birth_year")
+	@NotBlank(message="Doğum Yılı Alanı Boş Olamaz")
 	private int birthYear;
-	
-	public Candidate() {}
-	
-	public Candidate(String firstName, String lastName, String identityNumber, int birthYear) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.identityNumber = identityNumber;
-		this.birthYear = birthYear;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getIdentityNumber() {
-		return identityNumber;
-	}
-
-	public void setIdentityNumber(String identityNumber) {
-		this.identityNumber = identityNumber;
-	}
-
-	public int getBirthYear() {
-		return birthYear;
-	}
-
-	public void setBirthYear(int birthYear) {
-		this.birthYear = birthYear;
-	}
-	
-	
 	
 	
 	

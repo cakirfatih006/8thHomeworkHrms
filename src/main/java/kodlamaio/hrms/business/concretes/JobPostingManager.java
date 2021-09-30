@@ -3,62 +3,69 @@ package kodlamaio.hrms.business.concretes;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.JobPostingService;
+import kodlamaio.hrms.core.dtoConverter.DtoConverterService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.DataSuccessResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.JobPostingDao;
 import kodlamaio.hrms.entities.concretes.JobPosting;
+import kodlamaio.hrms.entities.dtos.JobPostingAddDto;
+import kodlamaio.hrms.entities.dtos.JobPostingDto;
+
 @Service
 public class JobPostingManager implements JobPostingService{
 
 	private JobPostingDao jobPostingDao;
-	
-	
+	private DtoConverterService dtoConverterService;
+		
 	@Autowired
-	public JobPostingManager(JobPostingDao jobPostingDao) {
+	public JobPostingManager(JobPostingDao jobPostingDao, DtoConverterService dtoConverterService) {
 		super();
 		this.jobPostingDao = jobPostingDao;
+		this.dtoConverterService=dtoConverterService;
+	}
+	
+	@Override
+	public Result add(JobPostingAddDto jobPostingAddDto) {
+		this.jobPostingDao.save((JobPosting) dtoConverterService.dtoClassConverter(jobPostingAddDto, JobPosting.class));
+		return new SuccessResult("İş İlanı Eklendi");
+	}
+	@Override
+	public Result delete(JobPosting jobPosting) {
+		this.jobPostingDao.delete(jobPosting);
+		return new SuccessResult("Silme işlemi Tamamlandı");
+	}
+	@Override
+	public DataResult<List<JobPostingDto>> findByIsActive() {
+		return new DataSuccessResult<List<JobPostingDto>>(dtoConverterService.dtoConverter
+				(jobPostingDao.findByIsActive(true), JobPostingDto.class),"Aktif İş İlanları Listelendi");
+		
+	}
+	@Override
+	public DataResult<List<JobPostingDto>> findByIsActiveOrderByApplicationDeadline() {
+		return new DataSuccessResult<List<JobPostingDto>>
+		(this.dtoConverterService.dtoConverter(this.jobPostingDao.findByIsActiveOrderByApplicationDeadline(true), JobPostingDto.class),"Data Listelendi");
+	}
+	@Override
+	public DataResult<List<JobPostingDto>> findByIsActiveAndEmployer_CompanyName(String companyName) {
+		return new DataSuccessResult<List<JobPostingDto>>
+		(this.dtoConverterService.dtoConverter(this.jobPostingDao.findByIsActiveAndEmployer_CompanyName(true, companyName), JobPostingDto.class),"Data Listelendi");
 	}
 	
 
 	@Override
-	public DataResult<List<JobPosting>> getAll() {
+	public DataResult<List<JobPostingDto>> getAll() {
 		
-		return new DataSuccessResult<List<JobPosting>>(this.jobPostingDao.findAll(),"Tüm iş ilanları getirildi.");
+		return new DataSuccessResult<List<JobPostingDto>>(dtoConverterService.dtoConverter
+				(jobPostingDao.findAll(), JobPostingDto.class),"Tüm İş İlanları Listelendi");
 	}
 
 
-	@Override
-	public DataResult<List<JobPosting>> getAllSortedByActivated() {
-		
-		return new DataSuccessResult<List<JobPosting>>(this.jobPostingDao.getByIsActivated(), "Aktif iş ilanları getirildi.");
-	}
-
-
-	@Override
-	public DataResult<List<JobPosting>> getAllSortedByDate() {
-		Sort sort = Sort.by(Sort.Direction.ASC,"appDeadline");
-		return new DataSuccessResult<List<JobPosting>>(this.jobPostingDao.findAll(sort));
-	}
-
-
-	@Override
-	public Result add(JobPosting jobPostings) {
-		this.jobPostingDao.save(jobPostings);
-		return new SuccessResult("iş ilanı eklendi.");
-	}
-
-
-	@Override
-	public Result update(JobPosting jobPostings) {
-		this.jobPostingDao.save(jobPostings);
-		return new SuccessResult("iş ilanı güncellendi.");
-	}
 	
 	
 	
